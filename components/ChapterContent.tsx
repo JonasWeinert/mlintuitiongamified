@@ -149,21 +149,10 @@ const C2S2: React.FC = () => {
 
 // --- Chapter 3: Discovering "The Best" Line ---
 const C3S1: React.FC = () => (
-    <ChapterWrapper title="Chapter 3: Discovering 'The Best' Line" subtitle="Step 1: Measuring Error">
-        <p>To find the "best" line, we first need a way to measure how "bad" any given line is. A good line should have small prediction errors.</p>
-        <p>The error for a single data point is the vertical distance between the actual point and our line's prediction. This distance is called a <strong>residual</strong>.</p>
-        <div className="text-center my-4">
-             <svg width="250" height="180" viewBox="0 0 250 180" className="mx-auto bg-slate-900/50 rounded-lg">
-                <line x1="20" y1="160" x2="230" y2="40" stroke="#4ade80" strokeWidth="2" />
-                <circle cx="150" cy="60" r="5" fill="#00BFFF" />
-                <line x1="150" y1="60" x2="150" y2="90" stroke="#f87171" strokeWidth="2" strokeDasharray="4 4" />
-                <text x="160" y="80" fill="#f87171" fontSize="14">Residual</text>
-                <text x="140" y="55" fill="#00BFFF" fontSize="14">Actual Data</text>
-                <text x="170" y="110" fill="#4ade80" fontSize="14">Predicted Value</text>
-                <circle cx="150" cy="90" r="3" fill="#4ade80" />
-            </svg>
-        </div>
-        <p>To measure the line's total error, we need to combine all the individual residuals. But how?</p>
+    <ChapterWrapper title="Chapter 3: Discovering 'The Best' Line" subtitle="Step 1: Which Line Wins?">
+        <p>Three different lines try to summarize our data. Each has been scored using three different methods. Your gut probably tells you one line looks best—but which scoring method agrees with your intuition?</p>
+        <ResidualMethodComparison />
+        <p className="mt-4 text-center text-slate-400 italic">Study the patterns in the scores. What makes a "good" score? We'll unpack this mystery in the next step...</p>
     </ChapterWrapper>
 );
 
@@ -234,11 +223,29 @@ const ResidualMethodComparison: React.FC = () => {
 
 
 const C3S2: React.FC = () => (
-    <ChapterWrapper title="Chapter 3: Discovering 'The Best' Line" subtitle="Step 2: A Tale of Three Errors">
-        <p>Let's test a few ways to combine residuals. Below, three lines try to fit data with one <strong>outlier</strong> (a point far from the others). Notice how the 'Total Error' changes for each line depending on the method.</p>
+    <ChapterWrapper title="Chapter 3: Discovering 'The Best' Line" subtitle="Step 2: Understanding Error">
+        <p>To understand those scores, we first need to understand how we measure error. A good line should have small prediction errors.</p>
+        <p>The error for a single data point is the vertical distance between the actual point and our line's prediction. This distance is called a <strong>residual</strong>.</p>
+        <div className="text-center my-4">
+             <svg width="250" height="180" viewBox="0 0 250 180" className="mx-auto bg-slate-900/50 rounded-lg">
+                <line x1="20" y1="160" x2="230" y2="40" stroke="#4ade80" strokeWidth="2" />
+                <circle cx="150" cy="60" r="5" fill="#00BFFF" />
+                <line x1="150" y1="60" x2="150" y2="90" stroke="#f87171" strokeWidth="2" strokeDasharray="4 4" />
+                <text x="160" y="80" fill="#f87171" fontSize="14">Residual</text>
+                <text x="140" y="55" fill="#00BFFF" fontSize="14">Actual Data</text>
+                <text x="170" y="110" fill="#4ade80" fontSize="14">Predicted Value</text>
+                <circle cx="150" cy="90" r="3" fill="#4ade80" />
+            </svg>
+        </div>
+        <p>To measure a line's total error, we need to combine all the individual residuals. The three methods you saw earlier represent three different ways to do this!</p>
+    </ChapterWrapper>
+);
+const C3S3: React.FC = () => (
+    <ChapterWrapper title="Chapter 3: Discovering 'The Best' Line" subtitle="Step 3: Which Method Is Best?">
+        <p>Now that you understand residuals, let's revisit those scoring methods. Each one combines errors differently.</p>
         <ResidualMethodComparison />
         <Quiz
-            question="The OLS algorithm's goal is to find the one line with the minimum possible error. Based on the visualization, which error method does OLS use?"
+            question="The OLS algorithm's goal is to find the one line with the minimum possible error. Looking at the three lines above, which error method does OLS use?"
             options={[
                 { text: 'Method 1: Sum of all residuals.', isCorrect: false, feedback: "Look at Line C. This method gives it a near-perfect score of ~1.0, but it's clearly a terrible fit. This method is unreliable because positive and negative errors cancel out." },
                 { text: 'Method 2: Sum of absolute values of residuals.', isCorrect: false, feedback: "A clever observation! This method prefers Line B, which hugs the majority of the data and has the lowest score (6.2). This is a valid approach called 'Least Absolute Deviations'. However, OLS works differently..." },
@@ -247,8 +254,8 @@ const C3S2: React.FC = () => (
         />
     </ChapterWrapper>
 );
-const C3S3: React.FC = () => (
-    <ChapterWrapper title="Chapter 3: Discovering 'The Best' Line" subtitle="Step 3: Ordinary Least Squares">
+const C3S4: React.FC = () => (
+    <ChapterWrapper title="Chapter 3: Discovering 'The Best' Line" subtitle="Step 4: Ordinary Least Squares">
         <p>You've just discovered the core principle of <strong>Ordinary Least Squares (OLS)</strong>! The "best" line is the one that minimizes the <strong>Residual Sum of Squares (RSS)</strong>.</p>
         <p>This method is the foundation of linear regression because it's mathematically convenient and effectively punishes large mistakes, forcing the line to fit all points reasonably well.</p>
         <div className="text-center my-4 p-4 bg-slate-900/50 rounded-lg font-mono text-brand-blue">
@@ -259,26 +266,26 @@ const C3S3: React.FC = () => (
 
 // --- Chapter 4: Building the Machine ---
 const C4S1: React.FC = () => (
-    <ChapterWrapper title="Chapter 4: Building the Machine" subtitle="Step 1: The Controls of a Line">
-      <p>Our goal is now clear: find the line that makes the RSS value as small as possible. A line is defined by two parameters, which act like control knobs:</p>
-      <ul className="list-disc list-inside my-4 pl-4 space-y-2">
-          <li><strong>&beta;<sub>0</sub> (Intercept):</strong> Where the line crosses the vertical (Y) axis. It's the starting value.</li>
-          <li><strong>&beta;<sub>1</sub> (Slope):</strong> How steep the line is. It tells us how much Y changes for a one-unit change in X.</li>
-      </ul>
-      <p>Our predicted value, which we call <Code>Y-hat</Code>, is given by the equation: <Code>Y-hat = &beta;<sub>0</sub> + &beta;<sub>1</sub> * X</Code>.</p>
-      <p>Now, let's try to tune these knobs ourselves.</p>
+    <ChapterWrapper title="Chapter 4: Building the Machine" subtitle="Step 1: Your Turn to be the Machine!">
+      <p className="font-bold text-xl text-center text-green-400">Find the best-fitting line!</p>
+      <p className="text-center text-slate-400 mb-4">Use the two sliders below to adjust the line. Try to make the "RSS" score as small as possible. Don't worry what the controls mean yet—just experiment!</p>
+      <InteractivePlot data={ICE_CREAM_DATA} />
     </ChapterWrapper>
 );
 const C4S2: React.FC = () => (
-    <ChapterWrapper title="Chapter 4: Building the Machine" subtitle="Step 2: Your Turn to be the Machine!">
-      <p className="font-bold text-xl text-center text-green-400">Goal: Manually find the best-fitting line!</p>
-      <p className="text-center text-slate-400 mb-4">Adjust the sliders for the intercept (&beta;<sub>0</sub>) and slope (&beta;<sub>1</sub>) to make the RSS value as small as you can.</p>
-      <InteractivePlot data={ICE_CREAM_DATA} />
+    <ChapterWrapper title="Chapter 4: Building the Machine" subtitle="Step 2: What You Just Controlled">
+      <p>You just discovered the two "control knobs" of any straight line! Here's what you were adjusting:</p>
+      <ul className="list-disc list-inside my-4 pl-4 space-y-2">
+          <li><strong>&beta;<sub>0</sub> (Intercept):</strong> Where the line crosses the vertical (Y) axis. Move this to shift the line up or down.</li>
+          <li><strong>&beta;<sub>1</sub> (Slope):</strong> How steep the line is. This tells us how much Y changes for a one-unit change in X.</li>
+      </ul>
+      <p>Together, they define the equation: <Code>Y-hat = &beta;<sub>0</sub> + &beta;<sub>1</sub> * X</Code>, where Y-hat is our prediction.</p>
+      <p>Your goal was to minimize <strong>RSS</strong> (Residual Sum of Squares)—exactly what the OLS algorithm does!</p>
     </ChapterWrapper>
 );
 const C4S3: React.FC = () => (
     <ChapterWrapper title="Chapter 4: Building the Machine" subtitle="Step 3: The OLS Algorithm">
-        <p>Great job! You probably got close, but finding the exact minimum by hand is tough. That's where the machine comes in.</p>
+        <p>You probably got close to the best line, but finding the exact minimum by hand is tough. That's where the machine comes in.</p>
         <p>The <strong>OLS algorithm</strong> uses calculus (specifically, derivatives) to find the precise values for &beta;<sub>0</sub> and &beta;<sub>1</sub> that minimize the RSS. It does what you just did, but perfectly and instantly.</p>
         <p>From now on, we'll let the algorithm find the best line for us. Our job is to understand and evaluate the result.</p>
     </ChapterWrapper>
@@ -286,20 +293,94 @@ const C4S3: React.FC = () => (
 
 
 // --- Chapter 5: Is Our Model Any Good? ---
+const BaselineComparison: React.FC = () => {
+    const avgY = useMemo(() => ICE_CREAM_DATA.reduce((sum, p) => sum + p.y, 0) / ICE_CREAM_DATA.length, []);
+    const olsSlope = 5.5;
+    const olsIntercept = 45;
+    const baselineData = [{x: 0, y: avgY}, {x: 40, y: avgY}];
+    const olsData = [{x: 0, y: olsIntercept}, {x: 40, y: olsSlope * 40 + olsIntercept}];
+    
+    const calculateTSS = useMemo(() => {
+        return ICE_CREAM_DATA.reduce((sum, p) => sum + Math.pow(p.y - avgY, 2), 0);
+    }, [avgY]);
+    
+    const calculateRSS = useMemo(() => {
+        return ICE_CREAM_DATA.reduce((sum, p) => {
+            const pred = olsSlope * p.x + olsIntercept;
+            return sum + Math.pow(p.y - pred, 2);
+        }, 0);
+    }, []);
+    
+    return (
+        <div className="my-6 space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="bg-slate-900/50 p-4 rounded-lg">
+                    <h4 className="text-lg font-bold text-red-400 text-center mb-2">Baseline: Always Guess Average</h4>
+                    <div className="h-64">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <ScatterChart margin={{ top: 10, right: 10, bottom: 20, left: 10 }}>
+                                <CartesianGrid strokeDasharray="3 3" stroke="#475569" />
+                                <XAxis type="number" dataKey="x" domain={[0, 40]} stroke="#94a3b8" />
+                                <YAxis type="number" dataKey="y" domain={[0, 350]} stroke="#94a3b8" />
+                                <Scatter data={ICE_CREAM_DATA} fill="#00BFFF" />
+                                {ICE_CREAM_DATA.map((p, i) => (
+                                    <ReferenceLine key={i} segment={[{x: p.x, y: p.y}, {x: p.x, y: avgY}]} stroke="#f87171" strokeOpacity={0.6} strokeWidth={2} />
+                                ))}
+                                <Line data={baselineData} dataKey="y" stroke="#f87171" strokeWidth={3} dot={false} />
+                            </ScatterChart>
+                        </ResponsiveContainer>
+                    </div>
+                    <div className="mt-2 text-center">
+                        <div className="text-sm text-slate-400">Total Sum of Squares (TSS)</div>
+                        <div className="text-2xl font-mono text-red-400">{calculateTSS.toFixed(0)}</div>
+                    </div>
+                </div>
+                
+                <div className="bg-slate-900/50 p-4 rounded-lg">
+                    <h4 className="text-lg font-bold text-green-400 text-center mb-2">OLS Model: Use Temperature</h4>
+                    <div className="h-64">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <ScatterChart margin={{ top: 10, right: 10, bottom: 20, left: 10 }}>
+                                <CartesianGrid strokeDasharray="3 3" stroke="#475569" />
+                                <XAxis type="number" dataKey="x" domain={[0, 40]} stroke="#94a3b8" />
+                                <YAxis type="number" dataKey="y" domain={[0, 350]} stroke="#94a3b8" />
+                                <Scatter data={ICE_CREAM_DATA} fill="#00BFFF" />
+                                {ICE_CREAM_DATA.map((p, i) => {
+                                    const pred = olsSlope * p.x + olsIntercept;
+                                    return <ReferenceLine key={i} segment={[{x: p.x, y: p.y}, {x: p.x, y: pred}]} stroke="#4ade80" strokeOpacity={0.6} strokeWidth={2} />;
+                                })}
+                                <Line data={olsData} dataKey="y" stroke="#4ade80" strokeWidth={3} dot={false} />
+                            </ScatterChart>
+                        </ResponsiveContainer>
+                    </div>
+                    <div className="mt-2 text-center">
+                        <div className="text-sm text-slate-400">Residual Sum of Squares (RSS)</div>
+                        <div className="text-2xl font-mono text-green-400">{calculateRSS.toFixed(0)}</div>
+                    </div>
+                </div>
+            </div>
+            <div className="bg-slate-800 p-4 rounded-lg text-center">
+                <p className="text-lg">Our OLS model reduced the error from <span className="text-red-400 font-bold">{calculateTSS.toFixed(0)}</span> down to <span className="text-green-400 font-bold">{calculateRSS.toFixed(0)}</span>!</p>
+                <p className="text-sm text-slate-400 mt-2">That's a reduction of <span className="text-brand-blue font-bold">{((1 - calculateRSS / calculateTSS) * 100).toFixed(1)}%</span></p>
+            </div>
+        </div>
+    );
+};
+
 const C5S1: React.FC = () => (
-    <ChapterWrapper title="Chapter 5: Is Our Model Any Good?" subtitle="Step 1: Establishing a Baseline">
-        <p>We have the "best" line according to OLS. But is this "best" line actually any good at predicting sales?</p>
-        <p>To know if our model is good, we need something to compare it to. What's the simplest, most naive prediction we could make if we didn't know the temperature?</p>
-        <p>We could just guess the <strong>average sales</strong> every single time. It's not a great prediction, but it's a baseline.</p>
+    <ChapterWrapper title="Chapter 5: Is Our Model Any Good?" subtitle="Step 1: Comparing Two Strategies">
+        <p>We have the "best" line according to OLS. But is it actually any good at predicting sales?</p>
+        <p>Let's compare two strategies. The red lines show errors when we ignore temperature and just guess the average. The green lines show errors when we use our OLS model.</p>
+        <BaselineComparison />
+        <p className="mt-4 text-center italic text-slate-400">Look at how much smaller the green errors are! But how do we turn this visual into a single score?</p>
     </ChapterWrapper>
 );
 const C5S2: React.FC = () => (
-    <ChapterWrapper title="Chapter 5: Is Our Model Any Good?" subtitle="Step 2: Quantifying Improvement">
-        <p>The total error of the simple "average" model is called the <strong>Total Sum of Squares (TSS)</strong>. This represents the total variation in the data.</p>
-        <p>Our OLS model's error is the <strong>Residual Sum of Squares (RSS)</strong>.</p>
-        <p>A good model should have an RSS that is much smaller than the TSS.</p>
+    <ChapterWrapper title="Chapter 5: Is Our Model Any Good?" subtitle="Step 2: Creating a Universal Score">
+        <p>You saw the error reduction: from TSS (baseline) down to RSS (our model). But raw numbers aren't intuitive—is reducing error by 5,000 good? What about 50,000?</p>
+        <p>We need a universal score that works for any dataset, regardless of scale.</p>
         <Quiz
-            question="How could we express our model's improvement over the baseline as a single, intuitive score?"
+            question="How could we express our model's improvement over the baseline as a single, intuitive score between 0 and 1?"
             options={[
                 { text: 'The difference: TSS - RSS', isCorrect: false, feedback: "This tells us the raw amount of error we reduced, which is useful! But it's not standardized. A value of '5000' is big for small numbers but tiny for large numbers." },
                 { text: 'The ratio: RSS / TSS', isCorrect: false, feedback: "This tells us what percentage of the original error is *left over* in our model. It's getting closer, but it's a bit backward—a lower score is better." },
@@ -396,7 +477,7 @@ const C8S5: React.FC = () => (
 export const COURSE_STRUCTURE = [
     { title: "The Prediction Game", steps: [C1S1, C1S2] },
     { title: "From Perfect to Plausible", steps: [C2S1, C2S2] },
-    { title: "Discovering 'The Best' Line", steps: [C3S1, C3S2, C3S3] },
+    { title: "Discovering 'The Best' Line", steps: [C3S1, C3S2, C3S3, C3S4] },
     { title: "Building the Machine", steps: [C4S1, C4S2, C4S3] },
     { title: "Is Our Model Any Good?", steps: [C5S1, C5S2, C5S3] },
     { title: "Beyond a Single Cause", steps: [C6S1] },
