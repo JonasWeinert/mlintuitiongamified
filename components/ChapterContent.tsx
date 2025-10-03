@@ -116,22 +116,22 @@ const C1S1: React.FC<{ feedbackMode?: boolean }> = ({ feedbackMode }) => (
   <ChapterWrapper title="Chapter 1: The Prediction Game" subtitle="Step 1: Finding the Pattern" feedbackMode={feedbackMode}>
     <p>Machine learning is about finding a rule in data we've seen to make guesses about data we haven't. You're already an expert at this.</p>
     <p>Consider this sequence:</p>
-    <p className="text-2xl font-mono text-center my-4 tracking-widest text-brand-accent">3, 6, 9, 12, 15, 18, 21, 24, ...</p>
+    <p className="text-2xl font-mono text-center my-4 tracking-widest text-brand-accent">0, 4,8, 12, 16, 20, 24, 28, ...</p>
     <Quiz
       question="What number comes next?"
       options={[
-        { text: '26', isCorrect: false, feedback: "Not quite. Look at the difference between consecutive numbers, like 6-3 and 9-6. Is it consistent?" },
-        { text: '27', isCorrect: true, feedback: "Perfect! You've spotted the pattern. Let's formalize it in the next step." },
-        { text: '30', isCorrect: false, feedback: "That's a jump of 6 from 24. The sequence seems to be increasing by a smaller, more regular amount." }
+        { text: '30', isCorrect: false, feedback: "Not quite. Look at the difference between consecutive numbers, like 8-4 and 12-8. Is it consistent?" },
+        { text: '32', isCorrect: true, feedback: "Perfect! You've spotted the pattern. Let's formalize it in the next step." },
+        { text: '34', isCorrect: false, feedback: "That's a jump of 8 from 28. The sequence seems to be increasing by a smaller, more regular amount." }
       ]}
     />
   </ChapterWrapper>
 );
 const C1S2: React.FC<{ feedbackMode?: boolean }> = ({ feedbackMode }) => (
     <ChapterWrapper title="Chapter 1: The Prediction Game" subtitle="Step 2: Defining the Rule" feedbackMode={feedbackMode}>
-        <p>You saw the pattern was "add 3 each time". We can formalize this. If we call the number's place in the sequence its "Position", the rule is:</p>
+        <p>You saw the pattern was "add 4 each time". We can formalize this. If we call the number's place in the sequence its "Position", the rule is:</p>
         <div className="text-center my-4 p-4 bg-slate-900/50 rounded-lg font-mono text-brand-blue">
-            Number = 3 &times; Position
+            Number = 4 &times; Position
         </div>
         <p>You've just "learned" a function from data. This is the core idea of predictive modeling.</p>
     </ChapterWrapper>
