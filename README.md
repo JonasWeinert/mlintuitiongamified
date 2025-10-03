@@ -7,3 +7,6 @@
    `npm install`
 2. Run the app:
    `npm run dev`
+
+
+Bootstrapped with AI studio. No backend at the moment.

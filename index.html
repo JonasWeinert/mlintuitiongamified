@@ -17,12 +17,26 @@
             },
             animation: {
               'fade-in': 'fadeIn 0.5s ease-in-out',
+              'bounce-up': 'bounceUp 1.5s ease-out forwards',
+              'pulse': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
             },
             keyframes: {
               fadeIn: {
                 '0%': { opacity: '0', transform: 'translateY(10px)' },
                 '100%': { opacity: '1', transform: 'translateY(0)' },
               },
+              bounceUp: {
+                '0%': { opacity: '1', transform: 'translateY(0) scale(1)' },
+                '50%': { opacity: '1', transform: 'translateY(-80px) scale(1.2)' },
+                '100%': { opacity: '0', transform: 'translateY(-150px) scale(0.8)' },
+              },
+              pulse: {
+                '0%, 100%': { opacity: '1' },
+                '50%': { opacity: '.7' },
+              },
+            },
+            scale: {
+              '102': '1.02',
             },
           },
         },
