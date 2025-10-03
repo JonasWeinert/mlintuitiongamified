@@ -20,7 +20,7 @@ const ChapterWrapper: React.FC<{ title: string, subtitle?: string; children: Rea
         <h2 className="text-xl sm:text-2xl font-bold text-brand-blue flex-1">{title}</h2>
         {feedbackMode && (
           <button
-            onClick={handleFeedback}
+            onClick={handleFeedback} //we
             className="flex-shrink-0 p-2 text-slate-400 hover:text-brand-blue hover:bg-slate-700 rounded-lg transition-colors"
             title="Give feedback on this step"
           >
